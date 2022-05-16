@@ -4,13 +4,20 @@
 
 #include <common_imp.h>
 #include <sysmem_sysevent.h>
+#include <threadman_kernel.h>
 
 SCE_MODULE_INFO("sceVshBridge_MSApp_Driver", SCE_MODULE_KERNEL | SCE_MODULE_ATTR_EXCLUSIVE_START | SCE_MODULE_ATTR_EXCLUSIVE_LOAD
     | SCE_MODULE_ATTR_CANT_STOP, 1, 3);
 SCE_MODULE_BOOTSTART("sceVshBridgeInit");
 SCE_SDK_VERSION(SDK_VERSION);
 
+// Function prototypes
+s32 sceImposeChanges(void);
+s32 sceImposeGetParam(s32 param);
+s32 sceImposeGetStatus(void);
 s32 vshBridgeEventHandler(s32 ev_id, char* ev_name __attribute__((unused)), void* param, s32* result);
+
+// Event Handler
 SceSysEventHandler g_vshBridgeEvent = {0x40, "vshBridge_msapp", 0x00FFFF00, vshBridgeEventHandler, 0, 0, NULL, {0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 // TODO: 0x00000150
@@ -107,7 +114,15 @@ s32 sceVshBridge_msapp_56F05CF5(void)
 // Subroutine sceVshBridge_msapp_5894C339 - Address 0x00000EB8
 s32 vshImposeChanges(void)
 {
-    return 0;
+    s32 ret = 0;
+    s32 level = sceKernelGetUserLevel();
+
+    if (level < 3)
+        ret = SCE_ERROR_PRIV_REQUIRED;
+    else
+        ret = sceImposeChanges();
+    
+    return ret;
 }
 
 // Subroutine sceVshBridge_msapp_5AAA31CF - Address 0x00000CEC
@@ -117,9 +132,17 @@ s32 sceVshBridge_msapp_5AAA31CF(void)
 }
 
 // Subroutine sceVshBridge_msapp_639C3CB3 - Address 0x00000E60
-s32 vshImposeGetParam(void)
+s32 vshImposeGetParam(s32 param)
 {
-    return 0;
+    s32 ret = 0;
+    s32 level = sceKernelGetUserLevel();
+
+    if (level < 3)
+        ret = SCE_ERROR_PRIV_REQUIRED;
+    else
+        ret = sceImposeGetParam(param);
+    
+    return ret;
 }
 
 // Subroutine sceVshBridge_msapp_6CAEB765 - Address 0x0000072C
@@ -173,7 +196,15 @@ s32 sceVshBridge_msapp_B30A7A02(void)
 // Subroutine sceVshBridge_msapp_CA719C34 - Address 0x00000E14
 s32 vshImposeGetStatus(void)
 {
-    return 0;
+    s32 ret = 0;
+    s32 level = sceKernelGetUserLevel();
+
+    if (level < 3)
+        ret = SCE_ERROR_PRIV_REQUIRED;
+    else
+        ret = sceImposeGetStatus();
+    
+    return ret;
 }
 
 // Subroutine sceVshBridge_msapp_CE32CBEF - Address 0x000006AC
