@@ -3,6 +3,7 @@
 */
 
 #include <common_imp.h>
+#include <sysmem_kernel.h>
 #include <sysmem_sysevent.h>
 #include <threadman_kernel.h>
 
@@ -48,13 +49,47 @@ s32 sceVshBridgeEnd(void)
 // Subroutine sceVshBridge_msapp_0212DA4A - Address 0x00000F04
 s32 sceVshBridge_msapp_0212DA4A(void)
 {
-    return 0;
+    s32 ret = 0;
+    
+    int level  = sceKernelGetUserLevel();
+    if (level < SCE_USER_LEVEL_APP) {
+        ret = SCE_ERROR_PRIV_REQUIRED;
+    }
+    else {
+        s32 oldK1 = pspShiftK1();
+        u32 model = sceKernelGetModel();
+        pspSetK1(oldK1);
+        ret = 0;
+        
+        if (model == PSP_GO || model == 5 || model == 7 || model == 9) {
+            ret = 1;
+        }
+    }
+    
+    return ret;
 }
 
 // Subroutine sceVshBridge_msapp_1463101C - Address 0x00000F88
 s32 sceVshBridge_msapp_1463101C(void)
 {
-    return 0;
+    s32 ret = 0;
+    
+    int level  = sceKernelGetUserLevel();
+    if (level < SCE_USER_LEVEL_APP) {
+        ret = SCE_ERROR_PRIV_REQUIRED;
+    }
+    else {
+        s32 oldK1 = pspShiftK1();
+        u32 model = sceKernelGetModel();
+        pspSetK1(oldK1);
+        ret = 0;
+        
+        if (model == PSP_GO || model == 5 || model == 7 || model == 9) {
+            ret = 1;
+        }
+    }
+    
+    return ret;
 }
 
 // Subroutine sceVshBridge_msapp_16C6FA21 - Address 0x000001E0
